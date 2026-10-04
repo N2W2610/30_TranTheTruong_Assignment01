@@ -1,0 +1,25 @@
+@_30_TranTheTruong_Assignment01_BackEnd_HostAddress = http://localhost:5134
+
+
+### Login as the default admin (stored in appsettings.json)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "admin@FUNewsManagementSystem.org", "password": "@@abc123@@" }
+
+### Login as a staff member (seed data: role 1)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "IsabellaDavid@FUNewsManagement.org", "password": "@1" }
+
+### Public: active news (no token needed), with OData query options
+GET {{host}}/odata/NewsArticles?$expand=Category,CreatedBy,Tags&$orderby=CreatedDate desc
+
+### Admin: list accounts (paste the token)
+GET {{host}}/odata/SystemAccounts?$filter=contains(tolower(AccountName),'emma')
+Authorization: Bearer <TOKEN>
+
+### Admin: report
+GET {{host}}/api/report?startDate=2024-01-01&endDate=2026-12-31
+Authorization: Bearer <TOKEN>
