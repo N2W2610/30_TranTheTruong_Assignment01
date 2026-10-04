@@ -1,0 +1,31 @@
+@model ProfileVM
+@{
+    ViewData["Title"] = "My profile";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="mb-3">My profile</h3>
+                <form asp-action="Index" method="post">
+                    <div asp-validation-summary="All" class="alert alert-danger py-2"></div>
+                    <input type="hidden" asp-for="AccountId" />
+                    <div class="mb-3">
+                        <label asp-for="AccountName" class="form-label">Name</label>
+                        <input asp-for="AccountName" class="form-control" maxlength="100" required />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="AccountEmail" class="form-label">Email</label>
+                        <input asp-for="AccountEmail" type="email" class="form-control" maxlength="70" required />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="NewPassword" class="form-label">New password</label>
+                        <input asp-for="NewPassword" type="password" class="form-control" maxlength="70" placeholder="Leave blank to keep the current password" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

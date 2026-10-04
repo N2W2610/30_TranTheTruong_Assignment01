@@ -1,0 +1,71 @@
+@model ReportVM
+@{
+    ViewData["Title"] = "News statistics report";
+}
+
+<h2 class="mb-3">News statistics report</h2>
+
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label class="form-label">Start date</label>
+        <input type="date" name="startDate" value="@ViewBag.Start" class="form-control" required />
+    </div>
+    <div class="col-auto">
+        <label class="form-label">End date</label>
+        <input type="date" name="endDate" value="@ViewBag.End" class="form-control" required />
+    </div>
+    <div class="col-auto"><button type="submit" class="btn btn-primary">Generate report</button></div>
+</form>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6">@Model.Total</div>Total articles</div></div></div>
+    <div class="col-md-4"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6 text-success">@Model.ActiveCount</div>Active</div></div></div>
+    <div class="col-md-4"><div class="card text-center shadow-sm"><div class="card-body"><div class="display-6 text-secondary">@Model.InactiveCount</div>Inactive</div></div></div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm"><div class="card-header">By category</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var g in Model.ByCategory) { <li class="list-group-item d-flex justify-content-between">@g.Name <span class="badge bg-primary">@g.Count</span></li> }
+                @if (Model.ByCategory.Count == 0) { <li class="list-group-item text-muted">No data</li> }
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm"><div class="card-header">By creator</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var g in Model.ByCreator) { <li class="list-group-item d-flex justify-content-between">@g.Name <span class="badge bg-primary">@g.Count</span></li> }
+                @if (Model.ByCreator.Count == 0) { <li class="list-group-item text-muted">No data</li> }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">Articles created from @Model.StartDate.ToString("yyyy-MM-dd") to @Model.EndDate.ToString("yyyy-MM-dd") (newest first)</div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>ID</th><th>Headline</th><th>Category</th><th>Created by</th><th>Created date</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model.Articles)
+                {
+                    <tr>
+                        <td>@a.NewsArticleId</td>
+                        <td>@a.Headline</td>
+                        <td>@a.CategoryName</td>
+                        <td>@a.CreatedByName</td>
+                        <td>@a.CreatedDate?.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@(a.NewsStatus ? "Active" : "Inactive")</td>
+                    </tr>
+                }
+                @if (Model.Articles.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center text-muted py-4">No articles in this period.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

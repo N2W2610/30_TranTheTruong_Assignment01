@@ -1,0 +1,46 @@
+@model List<NewsVM>
+@{
+    ViewData["Title"] = "Latest news";
+    var search = ViewBag.Search as string;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Latest news</h2>
+    <form method="get" class="d-flex" role="search">
+        <input type="text" name="search" value="@search" class="form-control me-2" placeholder="Search news..." maxlength="100" />
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No news articles found.</div>
+}
+
+<div class="row g-3">
+    @foreach (var n in Model)
+    {
+        var content = n.NewsContent ?? string.Empty;
+        var snippet = content.Length > 220 ? content.Substring(0, 220) + "..." : content;
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <span class="badge bg-primary mb-2">@(n.Category?.CategoryName ?? "Uncategorised")</span>
+                    <h5 class="card-title">@n.Headline</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@n.NewsTitle</h6>
+                    <p class="card-text news-content">@snippet</p>
+                    <div>
+                        @foreach (var t in n.Tags)
+                        {
+                            <span class="badge bg-light text-dark border">#@t.TagName</span>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <small class="text-muted">@n.CreatedDate?.DateTime.ToString("yyyy-MM-dd") @(n.CreatedBy != null ? "- " + n.CreatedBy.AccountName : "")</small>
+                    <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@n.NewsArticleId">Read more</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

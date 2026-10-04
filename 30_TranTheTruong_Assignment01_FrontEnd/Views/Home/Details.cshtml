@@ -1,0 +1,26 @@
+@model NewsVM
+@{
+    ViewData["Title"] = Model.Headline;
+}
+
+<a asp-action="Index" class="btn btn-link px-0">&larr; Back to news</a>
+
+<article class="card shadow-sm">
+    <div class="card-body">
+        <span class="badge bg-primary mb-2">@(Model.Category?.CategoryName ?? "Uncategorised")</span>
+        <h2>@Model.Headline</h2>
+        <h5 class="text-muted">@Model.NewsTitle</h5>
+        <p class="text-muted small">
+            Published @Model.CreatedDate?.DateTime.ToString("yyyy-MM-dd HH:mm")
+            @if (Model.CreatedBy != null) { <text>by @Model.CreatedBy.AccountName</text> }
+            @if (!string.IsNullOrWhiteSpace(Model.NewsSource)) { <text> &middot; Source: @Model.NewsSource</text> }
+        </p>
+        <hr />
+        <div class="news-content">@Model.NewsContent</div>
+        <hr />
+        @foreach (var t in Model.Tags)
+        {
+            <span class="badge bg-light text-dark border">#@t.TagName</span>
+        }
+    </div>
+</article>
